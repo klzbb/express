@@ -1,0 +1,36 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn add express
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/mongodb/bin:/Users/konglingzhan/develpment/flutter/bin:/usr/local/mysql/bin:/Users/konglingzhan/Library/Android/sdk/platform-tools:/usr/local/mongodb/bin:/Users/konglingzhan/develpment/flutter/bin:/usr/local/mysql/bin:/Users/konglingzhan/Library/Android/sdk/platform-tools
+
+Yarn version: 
+  1.15.2
+
+Node version: 
+  10.15.3
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/Users/konglingzhan/Library/Caches/Yarn/v4/npm-inherits-2.0.4-0fa2c64f932917c3433a0ded55363aae37416b7c/node_modules/inherits/README.md' -> '/Users/konglingzhan/Desktop/expressApp/node_modules/send/node_modules/inherits/README.md'
+
+npm manifest: 
+  {
+    "name": "expressapp",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
