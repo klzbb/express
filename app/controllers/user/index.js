@@ -47,5 +47,15 @@ class User {
       res.json(rows)
     })
   }
+  /**
+  * 查询用户
+  */
+ F100102 (req,res,next) {
+  let params = req.body;
+  let sql = `select * from user where phone=${params.phone}`
+  db.query(sql,(err,rows,fields) => {
+    res.json(rows)
+  })
+}
 }
 module.exports = new User();
