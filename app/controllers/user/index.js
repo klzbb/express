@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: DOP
+ * @version: 1.0.0
+ * @Author: Author
+ * @Date: 2019-12-18 10:00:17
+ * @LastEditors  : konglingzhan
+ * @LastEditTime : 2019-12-31 15:58:19
+ */
 const db = require('../../models/db.js')
 class User {
   /**
@@ -7,7 +15,8 @@ class User {
   */
   F100100 (req,res,next) {
     let params = req.body;
-    let sql = `select * from user where phone=${params.phone}`
+    console.log(params.password)
+    let sql = `select * from t_user where phone=${params.phone}`
     db.query(sql,(err,rows,fields) => {
       if(rows.length > 0){
         res.json({
@@ -15,8 +24,13 @@ class User {
           msg:'已经存在该用户'
         })
       }else{
-        let sql = `INSERT INTO user (phone,password) VALUES(${params.phone},${params.password})`;
+        let sql = `INSERT INTO t_user (phone,password) VALUES(${params.phone},${params.password})`;
+        // let sql = `INSERT INTO t_user (phone,password) VALUES(${params.phone},${params.password})`;
         db.query(sql,(err, rows, fields) => {
+          if(err){
+            console.log(err);
+            return false;
+          }
           if (rows.affectedRows) {
             console.log(rows)
             res.json({
@@ -42,20 +56,19 @@ class User {
   */
   F100101 (req,res,next) {
     let params = req.body;
-    let sql = `select * from user where phone=${params.phone}`
+    console.log(req.cookies);
+    let sql = `select * from t_user`
     db.query(sql,(err,rows,fields) => {
       res.json(rows)
     })
   }
   /**
-  * 查询用户
+  * 登录
   */
- F100102 (req,res,next) {
-  let params = req.body;
-  let sql = `select * from user where phone=${params.phone}`
-  db.query(sql,(err,rows,fields) => {
-    res.json(rows)
-  })
-}
+  F100102 (req,res,next) {
+    res.cookie('name','konglingzhan');
+    res.cookie('age','1999');
+    res.send({name:'konglingzhan'})
+  }
 }
 module.exports = new User();
