@@ -4,9 +4,10 @@
  * @Author: Author
  * @Date: 2019-12-18 10:00:17
  * @LastEditors  : konglingzhan
- * @LastEditTime : 2019-12-31 15:58:19
+ * @LastEditTime : 2019-12-31 16:18:09
  */
 const db = require('../../models/db.js')
+const loginUser = []
 class User {
   /**
   * 新增用户
@@ -57,18 +58,38 @@ class User {
   F100101 (req,res,next) {
     let params = req.body;
     console.log(req.cookies);
-    let sql = `select * from t_user`
-    db.query(sql,(err,rows,fields) => {
-      res.json(rows)
-    })
+    console.log(loginUser);
+    if(loginUser.findIndex(item => item === req.cookies.name) === -1){
+      res.send({
+        code:-3,
+        msg:'登录态失效'
+      })
+    } else {
+      let sql = `select * from t_user`
+      db.query(sql,(err,rows,fields) => {
+        res.json(rows)
+      })
+    }
+    
   }
   /**
   * 登录
   */
   F100102 (req,res,next) {
-    res.cookie('name','konglingzhan');
-    res.cookie('age','1999');
-    res.send({name:'konglingzhan'})
+    if(loginUser.findIndex(item => item === req.cookies.name) === -1){
+      loginUser.push(req.body.name);
+      res.cookie('name',req.body.name);
+      res.send({
+        msg:'登录成功',
+        code: 0
+      })
+    } else {
+      res.send({
+        msg:'你已经登录过了',
+        code: 0
+      })
+    }
+    
   }
 }
 module.exports = new User();
