@@ -91,5 +91,24 @@ class User {
     }
     
   }
+  /**
+  * 查询所有用户
+  */
+  F100103 (req,res,next) {
+    if(loginUser.findIndex(item => item === req.cookies.name) === -1){
+      loginUser.push(req.body.name);
+      res.cookie('name',req.body.name);
+      res.send({
+        msg:'登录成功',
+        code: 0
+      })
+    } else {
+      res.send({
+        msg:'你已经登录过了',
+        code: 0
+      })
+    }
+    
+  }
 }
 module.exports = new User();
