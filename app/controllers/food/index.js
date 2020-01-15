@@ -120,9 +120,5 @@ class User {
   }
 
 
-  F100107 (req,res,next){
-    console.log('F100107')
-  }
-
 }
 module.exports = new User();
