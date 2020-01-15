@@ -110,5 +110,7 @@ class User {
     }
     
   }
+  
+  F100104 (req,res,next){}
 }
 module.exports = new User();
