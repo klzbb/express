@@ -115,14 +115,12 @@ class User {
   }
   
   F100104 (req,res,next){}
-  F100106 (req,res,next){
-    console.log('F100106')
-  }
 
 
   F100107 (req,res,next){
     console.log('F100107')
   }
 
+  F100106 (req,res,next){}
 }
 module.exports = new User();
