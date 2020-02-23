@@ -8,8 +8,9 @@
  */
 module.exports = {
   username: 'root',
-  password: '123456',
+  password: '12345678',
   host: 'localhost',
   port: 3306,
-  database: 'express'
+  database: 'dop',
+  debug:true // 是否开启日志
 }
