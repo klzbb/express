@@ -11,57 +11,29 @@ const validator = require('validator')
 const { PWD_SALT, PRIVATE_KEY, JWT_EXPIRED } = require('../../utils/constant')
 const Result = require('../../models/Result.js')
 const jwt = require('jsonwebtoken')
-const { login } = require('../../services/user.js')
+const { login, findUser, userAdd, userDel, userAll } = require('../../services/user.js')
 const { md5, decoded } = require('../../utils/index.js')
-
+const types = require('../types.js')
 class User {
   /**
   * 新增用户
   * @param {String} phone  
   * @param {String} password 
   */
-  F100100 (req,res,next) {
-    let params = req.body;
-    console.log(params.password)
-    let sql = `select * from t_user where phone=${params.phone}`
-    db.query(sql,(err,rows,fields) => {
-      if(rows.length > 0){
-        res.json({
-          code:1000,
-          msg:'已经存在该用户0000000'
-        })
-      }else{
-        let sql = `INSERT INTO t_user (phone,password) VALUES(${params.phone},${params.password})`;
-        // let sql = `INSERT INTO t_user (phone,password) VALUES(${params.phone},${params.password})`;
-        db.query(sql,(err, rows, fields) => {
-          if(err){
-            console.log(err);
-            return false;
-          }
-          if (rows.affectedRows) {
-            console.log(rows)
-            res.json({
-              result: null,
-              status: true,
-              msg: '注册成功'
-            })
-          } else {
-            res.json({
-              result: null,
-              status: false,
-              msg: '注册失败'
-            })
-          }
-        })
-      }
-      
-    })
-    
+  async [types.F100100](req, res, next) {
+    let { phone, password } = req.body;
+    let user = await findUser(phone);
+    if (user) {
+      new Result('已经存在该用户').fail(res)
+    } else {
+      let nUser = await userAdd(phone, password);
+      new Result(nUser, '注册成功').success(res);
+    }
   }
   /**
   * search user by phone
   */
-  F100101 (req,res,next) {
+  [types.F100101](req, res, next) {
     const decode = decoded(req)
     if (decode && decode.phone) {
       findUser(decode.phone).then(user => {
@@ -77,11 +49,14 @@ class User {
     }
   }
   /**
-  * 登录
+  * des: user login
+  * @params {phone} String
+  * @params {password} String
+  * @return {result} Object
   */
-  async F100102 (req,res,next) {
-    const { phone,password } = req.body
-    const user = await login(phone,password)
+  async [types.F100102](req, res, next) {
+    const { phone, password } = req.body
+    const user = await login(phone, password)
     if (!user || user.length === 0) {
       new Result('登录失败').fail(res)
     } else {
@@ -92,29 +67,32 @@ class User {
       )
       new Result({ token }, '登录成功').success(res)
     }
-    // login(phone, password).then(user => {
-      
-    // })
   }
   /**
-  * 查询所有用户
+  * del user
+  * 
   */
-  F100103 (req,res,next) {
-    if(loginUser.findIndex(item => item === req.cookies.name) === -1){
-      loginUser.push(req.body.name);
-      res.cookie('name',req.body.name);
-      res.send({
-        msg:'登录成功',
-        code: 0
-      })
+  async [types.F100103](req, res, next) {
+    let { phone } = req.body;
+    let dUser = await userDel(phone);
+    if (dUser) {
+      new Result('删除成功').success(res);
     } else {
-      res.send({
-        msg:'你已经登录过了',
-        code: 0
-      })
+      new Result('删除error').fail(res);
     }
-    
   }
- 
+  /**
+  * search user all
+  * 
+  */
+  async [types.F100104](req, res, next) {
+    let users = await userAll();
+    if (users) {
+      new Result(users,'查询所有用户成功').success(res);
+    } else {
+      new Result('查询所有用户失败').fail(res);
+    }
+  }
+
 }
 module.exports = new User();

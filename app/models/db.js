@@ -92,7 +92,8 @@ exports.query = function () {
   }
 }
 
-exports.querySql = function (sql) {
+
+function querySql(sql) {
   const conn = connect()
   setting.debug && console.log(sql)
   return new Promise((resolve, reject) => {
@@ -112,34 +113,9 @@ exports.querySql = function (sql) {
       conn.end()
     }
   })
-
-  // pool.getConnection(function(error,conn){
-  //   if(error) {
-  //     setting.debug && console.log('CONNECT ERROR:',error.message)
-  //   } else {
-  //     setting.debug && console.log(sql)
-  //     return new Promise((resolve, reject) => {
-  //       try {
-  //         conn.query(sql, (err, results) => {
-  //           conn.release()
-  //           if (err) {
-  //             setting.debug && console.log('查询失败，原因:' + JSON.stringify(err))
-  //             reject(err)
-  //           } else {
-  //             setting.debug && console.log('查询成功', JSON.stringify(results))
-  //             resolve(results)
-  //           }
-  //         })
-  //       } catch (e) {
-  //         reject(e)
-  //       }
-  //     })
-  //   }
-  // })  
 }
 
-
-exports.queryOne = function (sql) {
+function queryOne(sql) {
   return new Promise((resolve, reject) => {
     querySql(sql).then(results => {
       if (results && results.length > 0) {
@@ -151,4 +127,9 @@ exports.queryOne = function (sql) {
       reject(err)
     })
   })
+}
+
+module.exports = {
+  querySql,
+  queryOne
 }
